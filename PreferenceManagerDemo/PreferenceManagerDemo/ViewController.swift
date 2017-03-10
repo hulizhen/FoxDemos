@@ -18,31 +18,20 @@ class ViewController: UIViewController {
     func demo() {
         let userDefaults = UserDefaults.standard
         
-        // Register default preferences.
-        var userInfoData = NSKeyedArchiver.archivedData(withRootObject: UserInfo(id: 0, name: ""))
-        let defaultPreferences: [String: Any] = [
-            PreferenceKey.launchAtLogin: false,
-            PreferenceKey.launchCount: 0,
-            PreferenceKey.userInfo: userInfoData,
-            ]
-        userDefaults.register(defaults: defaultPreferences)
-        
         // Test data.
         var launchAtLogin = true
         var launchCount = 10
-        var userInfo = UserInfo(id: 121, name: "Fox")
-        userInfoData = NSKeyedArchiver.archivedData(withRootObject: userInfo)
+        var userInfo: UserInfo? = UserInfo(id: 123, name: "Fox")
         
-        // Write preferences.
-        userDefaults.set(launchAtLogin, forKey: PreferenceKey.launchAtLogin)
-        userDefaults.set(launchCount, forKey: PreferenceKey.launchCount)
-        userDefaults.set(userInfoData, forKey: PreferenceKey.userInfo)
+        // Write preference.
+        Preferences[.launchAtLogin] = launchAtLogin
+        Preferences[.launchCount] = launchCount
+        Preferences[.userInfo] = userInfo
         
-        // Read preferences.
-        launchAtLogin = userDefaults.bool(forKey: PreferenceKey.launchAtLogin)
-        launchCount = userDefaults.integer(forKey: PreferenceKey.launchCount)
-        userInfoData = userDefaults.object(forKey: PreferenceKey.userInfo) as! Data
-        userInfo = NSKeyedUnarchiver.unarchiveObject(with: userInfoData) as! UserInfo
+        // Read preference.
+        launchAtLogin = Preferences[.launchAtLogin]
+        launchCount = Preferences[.launchCount]
+        userInfo = Preferences[.userInfo]
         
         // Check preferences.
         for (key, value) in userDefaults.dictionaryRepresentation() {
